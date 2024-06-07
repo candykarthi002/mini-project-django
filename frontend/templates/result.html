@@ -1,6 +1,9 @@
-<div class="result">
-  <div class="code-seg">
-    <code>SQL Query: {{query}}</code>
+<div class="convo">
+  <div class="user chat">{{ chat.question }}</div>
+  <div class="bot chat">
+    <div class="code-seg">
+      <code>SQL Query: {{chat.query_text}}</code>
+    </div>
+    <span>The answer for the question asked: {{ chat.answer }}</span>
   </div>
-  <p>The answer for the question asked: {{ answer }}</p>
 </div>

@@ -13,28 +13,25 @@ import mysql.connector
 
 import os
 from dotenv import load_dotenv
-load_dotenv()  # take environment variables from .env (especially openai api key)
+load_dotenv()
 
 import pandas as pd
 import mysql
 
+db_user = "root"
+db_password = "root"
+db_host = "localhost"
+db_name = "healthcare_dataset_1"
+
+
 def get_table():
-    db_user = "root"
-    db_password = "root"
-    db_host = "localhost"
-    db_name = "atliq_tshirts"
     conn = mysql.connector.connect(host=db_host,
             user=db_user,
             passwd=db_password,
             database=db_name)
-    return pd.read_sql("SELECT * FROM t_shirts LIMIT 10;", con=conn)
+    return pd.read_sql("SELECT * FROM healthcare LIMIT 5;", con=conn)
 
 def get_few_shot_db_chain():
-    db_user = "root"
-    db_password = "root"
-    db_host = "localhost"
-    db_name = "atliq_tshirts"
-
     db = SQLDatabase.from_uri(f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}",
                               sample_rows_in_table_info=3)
     llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.1)
