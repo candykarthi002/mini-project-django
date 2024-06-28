@@ -1,9 +1,19 @@
 <div class="convo">
-  <div class="user chat">{{ chat.question }}</div>
-  <div class="bot chat">
-    <div class="code-seg">
-      <code>SQL Query: {{chat.query_text}}</code>
+  <div class="user chat">
+    <div class="avatar-icon user-icon"></div>
+    <div class="message user-msg">
+      <span>{{ chat.question }}</span>
+      <small class="dt">{{chat.created_at}}</small>
     </div>
-    <span>The answer for the question asked: {{ chat.answer }}</span>
+  </div>
+  <div class="chat">
+    <div class="avatar-icon bot-icon"></div>
+    <div class="message bot">
+      <div class="code-seg">
+        <code>SQL Query: {{chat.query_text}}</code>
+      </div>
+      <span>{{ chat.answer }}</span>
+      <small class="dt">{{chat.created_at}}</small>
+    </div>
   </div>
 </div>

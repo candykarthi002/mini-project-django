@@ -4,173 +4,427 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mini Project Application</title>
+    <title>MedDBExplorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" href="{% static 'img/icon.png' %}" type="image/png">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <h1>Chat with Database</h1>
-    <div class="table-container">
-      <table>
-        {% if table %}
-        <tr>
-          {% for col in columns %}
-          <th>{{col}}</th>
-          {% endfor %}
-        </tr>
-        {% for i in table %}
-        <tr>
-          {% for j in columns %}
-          <td>{{i|get:j}}</td>
-          {% endfor %}
-        </tr>
-        {% endfor %} {% endif %}
-      </table>
+    <div class="navbar">
+      <span class="logo">
+        <img src='{% static "img/logo3.png" %}' alt="logo">
+      </span>
+      <div class="right">
+        <a href="{% url 'Logout' %}" class="logout-btn">log out</a>
+        <span class="table-icon" onclick="openpopup()"
+        ><ion-icon name="apps"></ion-icon
+          ></span>
+        </div>
+    </div>
+    <div class="hide pop-up">
+      <div class="table-container">
+        <div class="table-wrapper">
+          <table>
+            {% if table %}
+            <tr>
+              {% for col in columns %}
+              <th>{{col}}</th>
+              {% endfor %}
+            </tr>
+            {% for i in table %}
+            <tr>
+              {% for j in columns %}
+              <td>{{i|get:j}}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %} {% endif %}
+          </table>
+        </div>
+      </div>
     </div>
     <div class="result-container">
+      <div class="titlebar">
+        <span class="nav active"
+          >Chat <ion-icon name="chatbubbles"></ion-icon
+        ></span>
+        <span class="nav">Graph <ion-icon name="analytics"></ion-icon></span>
+      </div>
       <div
-        class="answer"
+        class="answer tab"
         hx-on="htmx:afterSettle: document.querySelector('.chat-list').scrollIntoView({ behavior: 'smooth', block: 'end' });"
       >
-        <h2>Chat</h2>
         <div class="chat-list">
+          <div class="convo">
+            <div class="chat">
+              <div class="avatar-icon bot-icon"></div>
+              <div class="message bot">
+                  <span>Hi, I'm DB chatbot 🤖. How can i help you?</span>
+              </div>
+            </div>
+          </div>
           {% for c in chat %}
           <div class="convo">
-            <div class="user chat">{{ c.question }}</div>
-            <div class="bot chat">
-              <div class="code-seg">
-                <code>SQL Query: {{c.query_text}}</code>
+            <div class="user chat">
+              <div class="avatar-icon user-icon"></div>
+              <div class="message user-msg">
+                <span>{{ c.question }}</span>
+                <small class="dt">{{c.created_at}}</small>
               </div>
-              <span>The answer for the question asked: {{ c.answer }}</span>
+            </div>
+            <div class="chat">
+              <div class="avatar-icon bot-icon"></div>
+              <div class="message bot">
+                <div class="code-seg">
+                  <code>SQL Query: {{c.query_text}}</code>
+                </div>
+                <span>{{ c.answer }}</span>
+                <small class="dt">{{c.created_at}}</small>
+              </div>
             </div>
           </div>
           {% endfor %}
         </div>
+        <form
+          id="chatForm"
+          hx-post="/ask/"
+          hx-trigger="click from:#ask-btn"
+          hx-target=".chat-list"
+          hx-swap="beforeend scroll:bottom"
+          hx-on--before-request="hideIcon(1)"
+          hx-on--after-request="this.reset();hideIcon(1)"
+          hx-indicator="#spinner"
+        >
+          {% csrf_token %}
+          <div>
+            <input
+              type="text"
+              name="query"
+              id="query"
+              placeholder="Ask me anything 😉"
+              required
+            />
+            <button id="ask-btn" type="submit">
+              <div class="btn-icon btn-1">
+                <ion-icon name="send"></ion-icon>
+              </div>
+              <span class="indicator" id="spinner">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                >
+                  <rect
+                    width="10"
+                    height="10"
+                    x="1"
+                    y="1"
+                    fill="currentColor"
+                    rx="1"
+                  >
+                    <animate
+                      id="svgSpinnersBlocksShuffle20"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="0;svgSpinnersBlocksShuffle27.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle21"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle24.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle22"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="svgSpinnersBlocksShuffle25.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle23"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle26.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                  </rect>
+                  <rect
+                    width="10"
+                    height="10"
+                    x="1"
+                    y="13"
+                    fill="currentColor"
+                    rx="1"
+                  >
+                    <animate
+                      id="svgSpinnersBlocksShuffle24"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle20.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle25"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="svgSpinnersBlocksShuffle21.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle26"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle22.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle27"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="svgSpinnersBlocksShuffle23.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                  </rect>
+                </svg>
+              </span>
+            </button>
+          </div>
+        </form>
       </div>
-      <form
-        id="chatForm"
-        hx-post="/ask/"
-        hx-target=".chat-list"
-        hx-swap="beforeend scroll:bottom"
-        hx-on="htmx:afterSettle: clearInput()"
-        hx-on--after-request="this.reset()"
-        hx-indicator="#spinner"
-      >
-        {% csrf_token %}
-        <div>
-          <input
-            type="text"
-            name="query"
-            id="query"
-            placeholder="Ask me anything 😉"
-          />
-          <button type="submit">
-            Ask
-            <span class="indicator" id="spinner">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-              >
-                <rect
-                  width="10"
-                  height="10"
-                  x="1"
-                  y="1"
-                  fill="currentColor"
-                  rx="1"
+      <div class="graph tab not-active-tab">
+        <div class="graph-chat-list">
+          <div class="convo">
+            <div class="chat">
+              <div class="avatar-icon bot-icon"></div>
+              <div class="message bot">
+                <span
+                  >Hi, I'm Plotter chatbot 🤖. I can assist you to plot different
+                  graphs?</span
                 >
-                  <animate
-                    id="svgSpinnersBlocksShuffle20"
-                    fill="freeze"
-                    attributeName="x"
-                    begin="0;svgSpinnersBlocksShuffle27.end"
-                    dur="0.2s"
-                    values="1;13"
-                  />
-                  <animate
-                    id="svgSpinnersBlocksShuffle21"
-                    fill="freeze"
-                    attributeName="y"
-                    begin="svgSpinnersBlocksShuffle24.end"
-                    dur="0.2s"
-                    values="1;13"
-                  />
-                  <animate
-                    id="svgSpinnersBlocksShuffle22"
-                    fill="freeze"
-                    attributeName="x"
-                    begin="svgSpinnersBlocksShuffle25.end"
-                    dur="0.2s"
-                    values="13;1"
-                  />
-                  <animate
-                    id="svgSpinnersBlocksShuffle23"
-                    fill="freeze"
-                    attributeName="y"
-                    begin="svgSpinnersBlocksShuffle26.end"
-                    dur="0.2s"
-                    values="13;1"
-                  />
-                </rect>
-                <rect
-                  width="10"
-                  height="10"
-                  x="1"
-                  y="13"
-                  fill="currentColor"
-                  rx="1"
-                >
-                  <animate
-                    id="svgSpinnersBlocksShuffle24"
-                    fill="freeze"
-                    attributeName="y"
-                    begin="svgSpinnersBlocksShuffle20.end"
-                    dur="0.2s"
-                    values="13;1"
-                  />
-                  <animate
-                    id="svgSpinnersBlocksShuffle25"
-                    fill="freeze"
-                    attributeName="x"
-                    begin="svgSpinnersBlocksShuffle21.end"
-                    dur="0.2s"
-                    values="1;13"
-                  />
-                  <animate
-                    id="svgSpinnersBlocksShuffle26"
-                    fill="freeze"
-                    attributeName="y"
-                    begin="svgSpinnersBlocksShuffle22.end"
-                    dur="0.2s"
-                    values="1;13"
-                  />
-                  <animate
-                    id="svgSpinnersBlocksShuffle27"
-                    fill="freeze"
-                    attributeName="x"
-                    begin="svgSpinnersBlocksShuffle23.end"
-                    dur="0.2s"
-                    values="13;1"
-                  />
-                </rect>
-              </svg>
-            </span>
-          </button>
+              </div>
+            </div>
+          </div>
+          {% for g in chart %}
+          <div class="convo">
+            <div class="user chat">
+              <div class="avatar-icon user-icon"></div>
+              <div class="message user-msg">
+                <span>{{ g.question }}</span>
+                <small class="dt">{{g.created_at}}</small>
+              </div>
+            </div>
+            <div class="chat">
+              <div class="avatar-icon bot-icon"></div>
+              <div class="message bot">
+                <span align="center">{{ g.chart_data.title }}</span>
+                <div class="chart-seg">
+                  <!-- <img src="{% static 'img/bar_chart.png' %}" alt="chart" /> -->
+                  <canvas id="myChart{{g.id}}"></canvas>
+                </div>
+                <small class="dt">{{g.created_at}}</small>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
         </div>
-      </form>
+        <form
+          id="graphForm"
+          hx-post="/plot/"
+          hx-trigger="click from:#plot-btn"
+          hx-target=".graph-chat-list"
+          hx-swap="beforeend scroll:bottom"
+          hx-on--before-request="hideIcon(2)"
+          hx-on--after-request="this.reset();hideIcon(2)"
+          hx-indicator="#spinner1"
+        >
+          {% csrf_token %}
+          <div>
+            {% comment %}
+            <input
+              type="text"
+              name="query"
+              id="query"
+              placeholder="Ask me anything 😉"
+              required
+            />
+            {% endcomment %}
+            <select name="chart-type" required>
+              {% for ch in chartTypes%}
+              <option value="{{ ch }}">{{ ch }}</option>
+              {% endfor %}
+            </select>
+            <select name="column-name" required>
+              {% for c in columns%}
+              <option value="{{ c }}">{{ c }}</option>
+              {% endfor %}
+            </select>
+            <button id="plot-btn" type="submit">
+              <div class="btn-icon btn-2">
+                <ion-icon name="send"></ion-icon>
+              </div>
+              <span class="indicator" id="spinner1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 24 24"
+                >
+                  <rect
+                    width="10"
+                    height="10"
+                    x="1"
+                    y="1"
+                    fill="currentColor"
+                    rx="1"
+                  >
+                    <animate
+                      id="svgSpinnersBlocksShuffle20"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="0;svgSpinnersBlocksShuffle27.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle21"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle24.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle22"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="svgSpinnersBlocksShuffle25.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle23"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle26.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                  </rect>
+                  <rect
+                    width="10"
+                    height="10"
+                    x="1"
+                    y="13"
+                    fill="currentColor"
+                    rx="1"
+                  >
+                    <animate
+                      id="svgSpinnersBlocksShuffle24"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle20.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle25"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="svgSpinnersBlocksShuffle21.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle26"
+                      fill="freeze"
+                      attributeName="y"
+                      begin="svgSpinnersBlocksShuffle22.end"
+                      dur="0.2s"
+                      values="1;13"
+                    />
+                    <animate
+                      id="svgSpinnersBlocksShuffle27"
+                      fill="freeze"
+                      attributeName="x"
+                      begin="svgSpinnersBlocksShuffle23.end"
+                      dur="0.2s"
+                      values="13;1"
+                    />
+                  </rect>
+                </svg>
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
     <script
       src="https://unpkg.com/htmx.org@1.9.12"
       integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
       crossorigin="anonymous"
     ></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
+    <script>
+      let ctx, chartData;
+      {% for g in chart %}
+      ctx = document.getElementById("myChart{{g.id}}");
+      chartData = {{g.chart_data|safe}}
+      new Chart(ctx, {
+        type: chartData.chart ?? chartData.chartType,
+        data: {
+          labels: chartData.labels ?? chartData.label,
+          datasets: [
+            {
+              data: chartData.data,
+              //backgroundColor: chartData.colors ?? chartData.color,
+              borderWidth: 1,
+              borderRadius: [10, 10]
+            },
+          ],
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
+          title: {
+            display: true,
+            text: "chartData.title",
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+      {% endfor %}
+    </script>
   </body>
 </html>

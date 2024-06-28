@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedDBExplorer</title>
+    <link rel="stylesheet" href="{% static 'css/login.css'%}" />
+  </head>
+  <body>
+    <div class="login-nav">
+      <span class="logo">
+        <img src='{% static "img/logo3.png" %}' alt="logo" />
+      </span>
+    </div>
+    <div class="main-container">
+      <div class="left-container">
+        <p>
+          Welcome to MedDBExplorer! Transform complex medical data into
+          actionable insights effortlessly. Enjoy natural language querying,
+          dynamic visualizations, and robust analytics, all within a secure and
+          user-friendly interface. Unlock the future of healthcare data
+          management today!
+        </p>
+        <div class="img-container">
+            <img src="../../static/img/illustration.svg" alt="">
+        </div>
+      </div>
+      <div class="right-container">
+        <h1 align="center">LOGIN FORM</h1>
+        <form action="/login/" method="post">
+          {% csrf_token %}
+          <label for="username">Enter Username</label>
+          <input type="text" name="username" id="username" required />
+          <label for="password">Enter Password</label>
+          <input type="password" name="password" id="password" required />
+          <input type="submit" value="Login" />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

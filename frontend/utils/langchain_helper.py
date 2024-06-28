@@ -7,34 +7,40 @@ from langchain.vectorstores import Chroma
 from langchain.prompts import FewShotPromptTemplate
 from langchain.chains.sql_database.prompt import PROMPT_SUFFIX, _mysql_prompt
 from langchain.prompts.prompt import PromptTemplate
+from langchain.agents import create_pandas_dataframe_agent
 
 from .few_shots import few_shots
-import mysql.connector
+# import mysql.connector
 
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
 import pandas as pd
-import mysql
+# import mysql
+
+import pymysql
+from sqlalchemy import create_engine
 
 db_user = "root"
 db_password = "root"
 db_host = "localhost"
 db_name = "healthcare_dataset_1"
 
+llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.1)
 
-def get_table():
-    conn = mysql.connector.connect(host=db_host,
-            user=db_user,
-            passwd=db_password,
-            database=db_name)
-    return pd.read_sql("SELECT * FROM healthcare LIMIT 5;", con=conn)
+def get_table(n=5, full=False):
+    cnx = create_engine(f'mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}')
+    if full:
+        df = pd.read_sql(f"SELECT * FROM healthcare;", cnx)
+    else:
+        df = pd.read_sql(f"SELECT * FROM healthcare LIMIT {n};", cnx)
+    return df
 
 def get_few_shot_db_chain():
     db = SQLDatabase.from_uri(f"mysql+pymysql://{db_user}:{db_password}@{db_host}/{db_name}",
                               sample_rows_in_table_info=3)
-    llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.1)
+    # llm = GooglePalm(google_api_key=os.environ["GOOGLE_API_KEY"], temperature=0.1)
 
     embeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')
     to_vectorize = [" ".join(example.values()) for example in few_shots]
@@ -74,3 +80,6 @@ def get_few_shot_db_chain():
     chain = SQLDatabaseChain.from_llm(llm, db, verbose=True, prompt=few_shot_prompt, return_intermediate_steps=True)
     return chain
 
+def get_plotting_agent():
+    agent = create_pandas_dataframe_agent(llm, get_table(full=True), verbose=True)
+    return agent

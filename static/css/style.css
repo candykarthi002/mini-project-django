@@ -1,5 +1,6 @@
 :root {
-  --primary-color: #03045e;
+  /* --primary-color: #03045e; */
+  --primary-color: #5350c4;
   --secondary-color: #90e0ef;
   --text-color: #333;
   --background-gradient: #ffffff;
@@ -11,38 +12,94 @@
 
 body {
   font-family: "Montserrat", sans-serif;
-  background: var(--background-gradient);
+  background: url("../img/mesh-bg1.png") no-repeat center;
+  /* background: var(--background-gradient); */
+  background-size: 100% 100%;
+  min-height: 100dvh;
   margin: 0;
-  padding: 2rem;
+  padding: 0 4rem;
+  /* padding-top: 0; */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  /* gap: .5rem; */
   color: var(--text-color);
 }
 
-h1 {
-  color: var(--text-color);
-  margin-bottom: 20px;
+.logo {
+  height: 75px;
 }
 
-h2 {
-  padding: 1rem;
-  color: white;
-  background: var(--primary-color);
+.titlebar {
+  /* width: 95%; */
+  padding: 0.5rem;
+  background: var(--background-gradient);
   border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.titlebar .nav {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.titlebar .nav > ion-icon {
+  font-size: 1.2rem;
+}
+
+.titlebar .nav.active {
+  background: var(--primary-color);
+  color: var(--background-gradient);
 }
 
 .table-container {
+  width: 80%;
+  height: 80%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border-radius: 20px;
+  padding: 1rem;
+  animation: popup 300ms alternate;
+}
+
+/* Animation */
+
+@keyframes popup {
+  from {
+    scale: 0;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+.table-wrapper {
   width: 90%;
-  overflow: auto;
-  border-radius: 20px 20px 0 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: scroll;
+  border-radius: 15px;
 }
 
 /* Custom scrollbar styles */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -53,10 +110,6 @@ h2 {
 ::-webkit-scrollbar-thumb {
   background: var(--primary-color);
   border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #0077b6;
 }
 
 table {
@@ -70,6 +123,7 @@ table {
 th,
 td {
   background: #90e0ef;
+  background: var(--background-gradient);
   padding: 10px;
   border-bottom: 1px solid #ddd;
   text-align: center;
@@ -82,56 +136,62 @@ th {
 }
 
 tr:hover {
-  background-color: #ddd;
+  background-color: #616161;
 }
 
 form {
-  width: 100%;
+  width: 95%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding: 1rem;
 }
 
 form div {
-  margin: 10px 0;
-  width: 95%;
+  /* margin: 10px 0; */
+  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 1rem;
 }
 
-input[type="text"] {
+input[type="text"],
+select {
   font-size: 1.2rem;
   flex: 1;
   padding: 15px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
   border: none;
   outline: none;
   border-radius: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: #caf0f8;
+  background: var(--background-gradient);
   font-family: "Roboto", monospace;
 }
 
 button {
   flex: 0.05;
-  padding: 10px 20px;
+  padding: 15px 5px;
   background-color: var(--primary-color);
   color: white;
-  border: none;
   border-radius: 15px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
   font-size: 1.2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  border: 2px solid var(--primary-color);
+}
+
+#plot-btn {
+  flex: 0.1;
 }
 
 button:hover {
-  border: 2px solid var(--primary-color);
   background-color: var(--background-gradient);
   color: var(--primary-color);
 }
@@ -149,28 +209,41 @@ button:hover {
 }
 
 .result-container {
-  width: 90%;
-  background-color: #00b4d8;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  min-height: 80vh;
+  padding-top: 1rem;
+  /* background-color: transparent; */
+  /* border-radius: 20px; */
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
   /* color: white; */
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.5rem;
+  justify-content: space-between;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.answer {
+.tab {
   width: 95%;
   font-size: 1.2rem;
 }
 
-.chat-list {
-  padding-right: 10px;
+.chat-list,
+.graph-chat-list {
+  /* padding-right: 10px; */
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 1.5rem;
-  max-height: 60vh;
+  max-height: 55vh;
   overflow-y: scroll;
 }
 
@@ -182,14 +255,50 @@ button:hover {
 }
 
 .chat {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.message {
   max-width: 50%;
   padding: 1rem;
   background: white;
   border-radius: 15px;
 }
 
+.user-icon {
+  background: url("../img/user.png") var(--background-gradient);
+}
+
+.bot-icon {
+  background: url("../img/bot.png") var(--background-gradient);
+}
+
 .user {
+  /* background: var(--primary-color);
+  color: var(--background-gradient); */
+  width: 75%;
   align-self: flex-end;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+}
+
+.user-msg {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.avatar-icon {
+  width: 50px;
+  height: 50px;
+  background-size: 100% 100%;
+  border-radius: 50%;
+  border: 2px solid var(--background-gradient);
+  outline: 2px solid var(--primary-color);
 }
 
 .bot {
@@ -205,9 +314,134 @@ button:hover {
 }
 
 .code-seg {
-  background: var(--secondary-color);
+  background: var(--primary-color);
+  color: var(--background-gradient);
   padding: 1rem;
   border-radius: 15px;
-  color: #333;
+  /* color: #333; */
   font-family: "Roboto", monospace;
+}
+
+/* Navbar */
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 2rem;
+}
+
+.navbar > .right {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logout-btn {
+  text-decoration: none;
+  padding: .75rem 1rem;
+  border-radius: 25px;
+  background: var(--primary-color);
+  color: var(--background-gradient);
+  font-size: 1.1rem;
+  font-weight: 500;
+  border: 2px solid var(--primary-color);
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.logout-btn:hover {
+  color: var(--primary-color);
+  background: var(--background-gradient);
+}
+
+.table-icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 1rem;
+  padding-bottom: 0.5rem;
+  transition: all 250ms ease;
+  z-index: 10;
+  background: transparent;
+  z-index: 10;
+}
+
+.table-icon:hover {
+  color: var(--background-gradient);
+  background: var(--primary-color);
+  /* background: rgba(0, 0, 0, 0.151); */
+}
+
+.pop-up {
+  position: absolute;
+  width: 100dvw;
+  height: 100%;
+  background: #000000ea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: all 300ms ease-in-out;
+  z-index: 10;
+}
+
+.hide {
+  display: none;
+}
+
+body.popupopen {
+  overflow: hidden;
+}
+/* 
+body.popupopen ion-icon {
+  z-index: -1;
+} */
+
+body.popupopen .table-icon {
+  background: var(--background-gradient);
+  z-index: 11;
+}
+
+body.popupopen .table-icon:hover {
+  color: var(--background-gradient);
+  background: var(--primary-color);
+}
+
+.not-active-tab {
+  display: none;
+}
+
+.graph {
+  background: transparent;
+}
+
+.chart-seg {
+  min-width: 400px;
+  max-height: 400px;
+}
+
+.dt {
+  font-size: 0.95rem;
+  text-align: end;
+  color: gray;
+}
+
+select {
+  background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") var(--background-gradient)
+    no-repeat;
+  background-position: calc(100% - 0.75rem) center !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  padding-right: 2rem !important;
+}
+
+.logo > img {
+  height: 90%;
+  object-fit: cover;
+  scale: 0.9;
 }
