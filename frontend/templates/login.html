@@ -4,6 +4,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
     <title>MedDBExplorer</title>
     <link rel="stylesheet" href="{% static 'css/login.css'%}" />
   </head>
@@ -23,20 +29,48 @@
           management today!
         </p>
         <div class="img-container">
-            <img src="../../static/img/illustration.svg" alt="">
+          <img src="../../static/img/illustration.svg" alt="" />
         </div>
       </div>
       <div class="right-container">
-        <h1 align="center">LOGIN FORM</h1>
-        <form action="/login/" method="post">
+        <div class="heading">Sign In</div>
+        <form action="/login/" class="form" method="post">
           {% csrf_token %}
-          <label for="username">Enter Username</label>
-          <input type="text" name="username" id="username" required />
-          <label for="password">Enter Password</label>
-          <input type="password" name="password" id="password" required />
-          <input type="submit" value="Login" />
+          <input
+            required
+            class="input"
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Username"
+          />
+          <input
+            required
+            class="input"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+          />
+          {% if error %}
+          <div class="error">{{ error }}<span class="close-btn"><ion-icon name="close-outline"></ion-icon></span></div>
+          {% endif %}
+          <input class="login-button" type="submit" value="Sign In" />
         </form>
       </div>
     </div>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <script>
+      document.querySelector('.error').addEventListener('click', e => {
+        document.querySelector('.error').style.display = 'none';
+      })
+    </script>
   </body>
 </html>

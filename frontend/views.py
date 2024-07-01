@@ -78,9 +78,12 @@ def login_user(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request=request, username=username, password=password)
+        print(user)
         if user:
             login(request ,user)
             return redirect(index)
+        else:
+            return render(request, 'login.html', {'error': 'Invalid Username / Password'})
     return render(request, 'login.html')
 
 @login_required
